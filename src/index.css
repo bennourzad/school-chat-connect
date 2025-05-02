@@ -101,15 +101,15 @@
   }
   
   .message-sent {
-    @apply bg-chat-sent text-right mr-auto rounded-br-lg rounded-tr-lg rounded-tl-sm;
+    @apply bg-chat-sent dark:bg-blue-900 text-right mr-auto rounded-br-lg rounded-tr-lg rounded-tl-sm;
   }
   
   .message-received {
-    @apply bg-chat-received rounded-bl-lg rounded-tl-lg rounded-tr-sm border border-gray-100;
+    @apply bg-chat-received dark:bg-gray-700 rounded-bl-lg rounded-tl-lg rounded-tr-sm border border-gray-100 dark:border-gray-600;
   }
   
   .message-time {
-    @apply text-xs text-gray-500 mt-1;
+    @apply text-xs text-gray-500 dark:text-gray-400 mt-1;
   }
   
   .status-indicator {
@@ -125,7 +125,7 @@
   }
   
   .avatar-container {
-    @apply flex-shrink-0 rounded-full overflow-hidden bg-gray-200 flex items-center justify-center text-gray-700 font-medium;
+    @apply flex-shrink-0 rounded-full overflow-hidden bg-gray-200 dark:bg-gray-700 flex items-center justify-center text-gray-700 dark:text-gray-300 font-medium;
   }
   
   .notification-badge {
@@ -137,10 +137,10 @@
   }
   
   .sidebar-item-active {
-    @apply bg-chat-hover text-chat-primary;
+    @apply bg-chat-hover dark:bg-gray-700 text-chat-primary dark:text-blue-400;
   }
   
   .chat-input {
-    @apply w-full p-3 rounded-full bg-chat-light border border-gray-200 focus:outline-none focus:ring-2 focus:ring-chat-primary focus:border-transparent;
+    @apply w-full p-3 rounded-full bg-chat-light dark:bg-gray-700 border border-gray-200 dark:border-gray-600 focus:outline-none focus:ring-2 focus:ring-chat-primary focus:border-transparent;
   }
 }

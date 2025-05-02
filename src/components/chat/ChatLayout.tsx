@@ -1,4 +1,3 @@
-
 import { useState, useEffect, useRef } from "react";
 import { UserItem } from "./UserItem";
 import { MessageInput } from "./MessageInput";
@@ -14,6 +13,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import { UserProfile } from "./UserProfile";
+import { DarkModeToggle } from "@/components/ui/dark-mode-toggle";
 
 import {
   Conversation,
@@ -177,22 +177,23 @@ export function ChatLayout() {
   const selectedUser = selectedUserId ? getUserById(selectedUserId) : null;
   
   return (
-    <div className="flex h-screen bg-chat-light overflow-hidden">
+    <div className="flex h-screen bg-chat-light dark:bg-gray-900 overflow-hidden">
       {/* الشريط الجانبي */}
-      <div className="w-80 border-l flex flex-col bg-white z-10">
-        <div className="p-4 border-b">
+      <div className="w-80 border-l dark:border-gray-700 flex flex-col bg-white dark:bg-gray-800 z-10">
+        <div className="p-4 border-b dark:border-gray-700">
           <div className="flex items-center gap-3">
             <Avatar>
               <AvatarImage src={currentUser.avatar} alt={currentUser.name} />
               <AvatarFallback>{getUserInitials(currentUser.name)}</AvatarFallback>
             </Avatar>
             <div className="flex-1">
-              <h2 className="font-medium">{currentUser.name}</h2>
-              <p className="text-xs text-muted-foreground">
+              <h2 className="font-medium dark:text-white">{currentUser.name}</h2>
+              <p className="text-xs text-muted-foreground dark:text-gray-400">
                 {currentUser.role === UserRole.TEACHER ? "معلم" : 
                  currentUser.role === UserRole.SUPERVISOR ? "مشرف" : "طالب"}
               </p>
             </div>
+            <DarkModeToggle />
             <Button variant="ghost" size="icon">
               <Bell className="h-5 w-5" />
             </Button>
@@ -202,7 +203,7 @@ export function ChatLayout() {
             <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="بحث عن مستخدم..."
-              className="pr-10 pl-4"
+              className="pr-10 pl-4 dark:bg-gray-700 dark:border-gray-600"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -215,9 +216,9 @@ export function ChatLayout() {
           onValueChange={setActiveTab} 
           className="flex-1 flex flex-col"
         >
-          <TabsList className="grid grid-cols-2 p-1 m-2">
-            <TabsTrigger value="chats">المحادثات</TabsTrigger>
-            <TabsTrigger value="users">المستخدمون</TabsTrigger>
+          <TabsList className="grid grid-cols-2 p-1 m-2 dark:bg-gray-700">
+            <TabsTrigger value="chats" className="dark:data-[state=active]:bg-gray-600">المحادثات</TabsTrigger>
+            <TabsTrigger value="users" className="dark:data-[state=active]:bg-gray-600">المستخدمون</TabsTrigger>
           </TabsList>
           
           <TabsContent value="chats" className="flex-1 flex flex-col">
@@ -271,19 +272,19 @@ export function ChatLayout() {
       </div>
       
       {/* منطقة المحادثة */}
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col dark:bg-gray-900">
         {selectedUser ? (
           <>
             {/* رأس المحادثة */}
-            <div className="p-4 border-b bg-white flex items-center justify-between shadow-sm">
+            <div className="p-4 border-b dark:border-gray-700 bg-white dark:bg-gray-800 flex items-center justify-between shadow-sm">
               <div className="flex items-center gap-3">
                 <Avatar>
                   <AvatarImage src={selectedUser.avatar} alt={selectedUser.name} />
                   <AvatarFallback>{getUserInitials(selectedUser.name)}</AvatarFallback>
                 </Avatar>
                 <div>
-                  <h2 className="font-medium">{selectedUser.name}</h2>
-                  <p className="text-xs text-muted-foreground">
+                  <h2 className="font-medium dark:text-white">{selectedUser.name}</h2>
+                  <p className="text-xs text-muted-foreground dark:text-gray-400">
                     {selectedUser.online ? "متصل الآن" : "غير متصل"}
                   </p>
                 </div>
@@ -294,6 +295,7 @@ export function ChatLayout() {
                   variant="ghost" 
                   size="sm"
                   onClick={() => setIsUserProfileOpen(true)}
+                  className="dark:text-gray-200 dark:hover:bg-gray-700"
                 >
                   معلومات المستخدم
                 </Button>
@@ -301,7 +303,7 @@ export function ChatLayout() {
             </div>
             
             {/* محتوى المحادثة */}
-            <ScrollArea className="flex-1 p-4">
+            <ScrollArea className="flex-1 p-4 dark:bg-gray-900">
               <div className="max-w-3xl mx-auto">
                 {messages.length > 0 ? (
                   <MessageGroup 
@@ -310,11 +312,11 @@ export function ChatLayout() {
                   />
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-12">
-                    <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                      <UserIcon className="h-8 w-8 text-muted-foreground" />
+                    <div className="w-16 h-16 bg-muted dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+                      <UserIcon className="h-8 w-8 text-muted-foreground dark:text-gray-400" />
                     </div>
-                    <h3 className="text-lg font-medium">ابدأ محادثة جديدة</h3>
-                    <p className="text-muted-foreground text-sm mt-1">
+                    <h3 className="text-lg font-medium dark:text-white">ابدأ محادثة جديدة</h3>
+                    <p className="text-muted-foreground dark:text-gray-400 text-sm mt-1">
                       لم يتم العثور على رسائل سابقة مع {selectedUser.name}
                     </p>
                   </div>
@@ -324,7 +326,7 @@ export function ChatLayout() {
             </ScrollArea>
             
             {/* مدخل الرسائل */}
-            <div className="mt-auto border-t">
+            <div className="mt-auto border-t dark:border-gray-700">
               <div className="max-w-3xl mx-auto">
                 <MessageInput
                   onSendMessage={handleSendMessage}
@@ -335,9 +337,9 @@ export function ChatLayout() {
             
             {/* نافذة معلومات المستخدم */}
             <Dialog open={isUserProfileOpen} onOpenChange={setIsUserProfileOpen}>
-              <DialogContent className="sm:max-w-md">
+              <DialogContent className="sm:max-w-md dark:bg-gray-800 dark:text-white">
                 <DialogHeader>
-                  <DialogTitle className="text-center">معلومات المستخدم</DialogTitle>
+                  <DialogTitle className="text-center dark:text-white">معلومات المستخدم</DialogTitle>
                 </DialogHeader>
                 {selectedUser && <UserProfile user={selectedUser} />}
               </DialogContent>
@@ -345,14 +347,14 @@ export function ChatLayout() {
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full p-4">
-            <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4">
-              <UserIcon className="h-10 w-10 text-muted-foreground" />
+            <div className="w-20 h-20 bg-muted dark:bg-gray-700 rounded-full flex items-center justify-center mb-4">
+              <UserIcon className="h-10 w-10 text-muted-foreground dark:text-gray-400" />
             </div>
-            <h2 className="text-2xl font-semibold mb-2">تطبيق الدردشة المدرسية</h2>
-            <p className="text-muted-foreground text-center max-w-md mb-4">
+            <h2 className="text-2xl font-semibold mb-2 dark:text-white">تطبيق الدردشة المدرسية</h2>
+            <p className="text-muted-foreground dark:text-gray-400 text-center max-w-md mb-4">
               اختر محادثة من القائمة الجانبية أو ابدأ محادثة جديدة مع أحد المستخدمين
             </p>
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground dark:text-gray-400">
               أنت مسجل دخول كـ {currentUser.role === UserRole.TEACHER ? "معلم" : 
                 currentUser.role === UserRole.SUPERVISOR ? "مشرف" : "طالب"}
             </p>
