@@ -11,6 +11,8 @@ import { Separator } from "@/components/ui/separator";
 import { Badge } from "@/components/ui/badge";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { toast } from "sonner";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
+import { UserProfile } from "./UserProfile";
 
 import {
   Conversation,
@@ -43,6 +45,7 @@ export function ChatLayout() {
   const [activeTab, setActiveTab] = useState<string>("chats");
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
+  const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -286,7 +289,11 @@ export function ChatLayout() {
               </div>
               
               <div className="flex items-center gap-2">
-                <Button variant="ghost" size="sm">
+                <Button 
+                  variant="ghost" 
+                  size="sm"
+                  onClick={() => setIsUserProfileOpen(true)}
+                >
                   معلومات المستخدم
                 </Button>
               </div>
@@ -324,6 +331,16 @@ export function ChatLayout() {
                 />
               </div>
             </div>
+            
+            {/* نافذة معلومات المستخدم */}
+            <Dialog open={isUserProfileOpen} onOpenChange={setIsUserProfileOpen}>
+              <DialogContent className="sm:max-w-md" dir="rtl">
+                <DialogHeader>
+                  <DialogTitle className="text-center">معلومات المستخدم</DialogTitle>
+                </DialogHeader>
+                {selectedUser && <UserProfile user={selectedUser} />}
+              </DialogContent>
+            </Dialog>
           </>
         ) : (
           <div className="flex flex-col items-center justify-center h-full p-4">
