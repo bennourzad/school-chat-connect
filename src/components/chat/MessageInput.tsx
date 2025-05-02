@@ -80,21 +80,13 @@ export function MessageInput({
       )}
 
       <form onSubmit={handleSubmit} className="flex items-center gap-2">
-        <input
-          type="file"
-          ref={fileInputRef}
-          onChange={handleFileChange}
-          className="hidden"
-          multiple
-        />
         <Button
-          type="button"
-          variant="ghost"
+          type="submit"
           size="icon"
-          className="text-muted-foreground"
-          onClick={() => fileInputRef.current?.click()}
+          className="bg-chat-primary text-white rounded-full hover:bg-chat-primary/90"
+          disabled={!message.trim() && files.length === 0}
         >
-          <Paperclip className="h-5 w-5" />
+          <Send className="h-5 w-5" />
         </Button>
 
         <textarea
@@ -111,13 +103,21 @@ export function MessageInput({
           }}
         />
 
+        <input
+          type="file"
+          ref={fileInputRef}
+          onChange={handleFileChange}
+          className="hidden"
+          multiple
+        />
         <Button
-          type="submit"
+          type="button"
+          variant="ghost"
           size="icon"
-          className="bg-chat-primary text-white rounded-full hover:bg-chat-primary/90"
-          disabled={!message.trim() && files.length === 0}
+          className="text-muted-foreground"
+          onClick={() => fileInputRef.current?.click()}
         >
-          <Send className="h-5 w-5" />
+          <Paperclip className="h-5 w-5" />
         </Button>
       </form>
     </div>

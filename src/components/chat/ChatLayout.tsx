@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useRef } from "react";
 import { UserItem } from "./UserItem";
 import { MessageInput } from "./MessageInput";
 import { MessageGroup } from "./MessageItem";
-import { Search, Bell, User as UserIcon } from "lucide-react";
+import { Search, Bell, UserIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -178,7 +179,7 @@ export function ChatLayout() {
   return (
     <div className="flex h-screen bg-chat-light overflow-hidden">
       {/* الشريط الجانبي */}
-      <div className="w-80 border-r flex flex-col bg-white z-10">
+      <div className="w-80 border-l flex flex-col bg-white z-10">
         <div className="p-4 border-b">
           <div className="flex items-center gap-3">
             <Avatar>
@@ -198,10 +199,10 @@ export function ChatLayout() {
           </div>
           
           <div className="relative mt-4">
-            <Search className="absolute left-3 top-2.5 h-4 w-4 text-muted-foreground" />
+            <Search className="absolute right-3 top-2.5 h-4 w-4 text-muted-foreground" />
             <Input
               placeholder="بحث عن مستخدم..."
-              className="pl-10 pr-4"
+              className="pr-10 pl-4"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
@@ -334,7 +335,7 @@ export function ChatLayout() {
             
             {/* نافذة معلومات المستخدم */}
             <Dialog open={isUserProfileOpen} onOpenChange={setIsUserProfileOpen}>
-              <DialogContent className="sm:max-w-md" dir="rtl">
+              <DialogContent className="sm:max-w-md">
                 <DialogHeader>
                   <DialogTitle className="text-center">معلومات المستخدم</DialogTitle>
                 </DialogHeader>

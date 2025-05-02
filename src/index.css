@@ -91,6 +91,7 @@
 
   body {
     @apply bg-background text-foreground;
+    direction: rtl;
   }
 }
 
@@ -100,11 +101,11 @@
   }
   
   .message-sent {
-    @apply bg-chat-sent text-right ml-auto rounded-bl-lg rounded-tl-lg rounded-tr-sm;
+    @apply bg-chat-sent text-right mr-auto rounded-br-lg rounded-tr-lg rounded-tl-sm;
   }
   
   .message-received {
-    @apply bg-chat-received rounded-br-lg rounded-tr-lg rounded-tl-sm border border-gray-100;
+    @apply bg-chat-received rounded-bl-lg rounded-tl-lg rounded-tr-sm border border-gray-100;
   }
   
   .message-time {
@@ -112,7 +113,7 @@
   }
   
   .status-indicator {
-    @apply w-2 h-2 rounded-full inline-block ml-1;
+    @apply w-2 h-2 rounded-full inline-block mr-1;
   }
   
   .status-delivered {
@@ -128,7 +129,7 @@
   }
   
   .notification-badge {
-    @apply absolute -top-1 -right-1 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center;
+    @apply absolute -top-1 -left-1 bg-red-500 text-white text-xs font-bold rounded-full flex items-center justify-center;
   }
   
   .sidebar-item {

@@ -23,7 +23,7 @@ export function MessageItem({ message, isCurrentUser, showAvatar = true }: Messa
     <div
       className={cn(
         "flex gap-2 mb-4 max-w-[85%]",
-        isCurrentUser ? "mr-auto flex-row" : "ml-auto flex-row-reverse"
+        isCurrentUser ? "ml-auto flex-row-reverse" : "mr-auto flex-row"
       )}
     >
       {showAvatar && (
@@ -41,8 +41,8 @@ export function MessageItem({ message, isCurrentUser, showAvatar = true }: Messa
             className={cn(
               "px-4 py-2 rounded-2xl max-w-full",
               isCurrentUser
-                ? "bg-chat-received text-foreground border border-gray-100"
-                : "bg-chat-primary text-white"
+                ? "bg-chat-primary text-white"
+                : "bg-chat-received text-foreground border border-gray-100"
             )}
           >
             <p className="text-sm whitespace-pre-wrap break-words">{message.text}</p>
@@ -57,8 +57,8 @@ export function MessageItem({ message, isCurrentUser, showAvatar = true }: Messa
                 className={cn(
                   "px-3 py-2 rounded-lg border flex items-center gap-2",
                   isCurrentUser
-                    ? "bg-chat-received border-gray-200"
-                    : "bg-chat-primary/10 border-chat-primary/30"
+                    ? "bg-chat-primary/10 border-chat-primary/30"
+                    : "bg-chat-received border-gray-200"
                 )}
               >
                 <div className="w-10 h-10 bg-gray-100 rounded flex items-center justify-center text-gray-500">
@@ -91,12 +91,12 @@ export function MessageItem({ message, isCurrentUser, showAvatar = true }: Messa
         <div
           className={cn(
             "flex items-center text-xs text-gray-500",
-            isCurrentUser ? "justify-start" : "justify-end"
+            isCurrentUser ? "justify-end" : "justify-start"
           )}
         >
           <span>{formatTime(message.createdAt)}</span>
           {isCurrentUser && (
-            <span className="ml-1">
+            <span className="mr-1">
               {message.status === MessageStatus.SENT && (
                 <Check className="h-3 w-3 inline" />
               )}
