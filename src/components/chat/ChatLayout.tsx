@@ -1,9 +1,8 @@
-
 import { useState, useEffect, useRef } from "react";
 import { UserItem } from "./UserItem";
 import { MessageInput } from "./MessageInput";
 import { MessageGroup } from "./MessageItem";
-import { Search, Bell, User } from "lucide-react";
+import { Search, Bell, User as UserIcon } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -304,7 +303,7 @@ export function ChatLayout() {
                 ) : (
                   <div className="flex flex-col items-center justify-center h-full py-12">
                     <div className="w-16 h-16 bg-muted rounded-full flex items-center justify-center mb-4">
-                      <User className="h-8 w-8 text-muted-foreground" />
+                      <UserIcon className="h-8 w-8 text-muted-foreground" />
                     </div>
                     <h3 className="text-lg font-medium">ابدأ محادثة جديدة</h3>
                     <p className="text-muted-foreground text-sm mt-1">
@@ -329,7 +328,7 @@ export function ChatLayout() {
         ) : (
           <div className="flex flex-col items-center justify-center h-full p-4">
             <div className="w-20 h-20 bg-muted rounded-full flex items-center justify-center mb-4">
-              <User className="h-10 w-10 text-muted-foreground" />
+              <UserIcon className="h-10 w-10 text-muted-foreground" />
             </div>
             <h2 className="text-2xl font-semibold mb-2">تطبيق الدردشة المدرسية</h2>
             <p className="text-muted-foreground text-center max-w-md mb-4">
