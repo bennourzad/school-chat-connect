@@ -1,4 +1,5 @@
 # Welcome to your Lovable project
+https://school-chat-connect.lovable.app/
 
 ## Project info
 
