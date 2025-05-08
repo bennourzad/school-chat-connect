@@ -57,3 +57,9 @@ export interface Conversation {
   unreadCount: number;
   status: ConversationStatus;
 }
+
+export interface MessageInputProps {
+  onSendMessage: (text: string, files?: File[]) => void;
+  placeholder: string;
+  disabled?: boolean;
+}
