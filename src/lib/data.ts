@@ -1,369 +1,243 @@
+import { User, UserRole, Message, Conversation, MessageStatus, ConversationStatus } from './types';
 
-import { User, UserRole, Message, MessageStatus, Conversation, MessageFile } from './types';
-
-// بيانات المستخدمين
 export const users: User[] = [
   {
-    id: '1',
+    id: 'user1',
     name: 'أحمد محمد',
-    role: UserRole.TEACHER,
-    avatar: '/placeholder.svg',
-    email: 'ahmed@school.com',
-    username: '@ahmed',
-    bio: 'مدرس الرياضيات',
-    phone: '+9661234567',
+    username: 'ahmed.mohamed',
+    email: 'ahmed.mohamed@example.com',
+    role: UserRole.STUDENT,
+    avatar: 'https://i.pravatar.cc/150?img=1',
+    bio: 'طالب مجتهد يحب التعلم.',
+    phone: '0555123456',
     online: true,
+    lastActive: new Date(),
   },
   {
-    id: '2',
-    name: 'سارة أحمد',
+    id: 'user2',
+    name: 'ليلى خالد',
+    username: 'laila.khaled',
+    email: 'laila.khaled@example.com',
     role: UserRole.TEACHER,
-    avatar: '/placeholder.svg',
-    email: 'sara@school.com',
-    username: '@sara',
-    bio: 'مدرسة اللغة العربية',
-    phone: '+9661234568',
+    avatar: 'https://i.pravatar.cc/150?img=2',
+    bio: 'معلمة لغة عربية متفانية.',
+    phone: '0555654321',
     online: false,
-    lastActive: new Date(Date.now() - 15 * 60000), // 15 دقيقة مضت
+    lastActive: new Date(Date.now() - 3600000), // Last active 1 hour ago
   },
   {
-    id: '3',
-    name: 'محمد خالد',
+    id: 'user3',
+    name: 'سالم عبدالله',
+    username: 'salem.abdullah',
+    email: 'salem.abdullah@example.com',
     role: UserRole.SUPERVISOR,
-    avatar: '/placeholder.svg',
-    email: 'mohamed@school.com',
-    username: '@mohamed',
-    bio: 'مشرف الفصل الأول',
-    phone: '+9661234569',
+    avatar: 'https://i.pravatar.cc/150?img=3',
+    bio: 'مشرف تربوي ذو خبرة.',
+    phone: '0555112233',
     online: true,
+    lastActive: new Date(),
   },
   {
-    id: '4',
-    name: 'خالد عبدالله',
+    id: 'user4',
+    name: 'نورة علي',
+    username: 'noura.ali',
+    email: 'noura.ali@example.com',
     role: UserRole.STUDENT,
-    avatar: '/placeholder.svg',
-    email: 'khaled@school.com',
-    username: '@khaled',
-    bio: 'طالب في الصف الثالث',
-    online: true,
-  },
-  {
-    id: '5',
-    name: 'نورة محمد',
-    role: UserRole.STUDENT,
-    avatar: '/placeholder.svg',
-    email: 'noora@school.com',
-    username: '@noora',
-    bio: 'طالبة في الصف الثاني',
+    avatar: 'https://i.pravatar.cc/150?img=4',
+    bio: 'طالبة متفوقة في الرياضيات.',
+    phone: '0555445566',
     online: false,
-    lastActive: new Date(Date.now() - 60 * 60000), // ساعة مضت
-  },
-  {
-    id: '6',
-    name: 'فهد عبدالعزيز',
-    role: UserRole.STUDENT,
-    avatar: '/placeholder.svg',
-    email: 'fahad@school.com',
-    username: '@fahad',
-    bio: 'طالب في الصف الرابع',
-    online: true,
-  }
-];
-
-// قائمة بالملفات
-export const files: MessageFile[] = [
-  {
-    id: 'file1',
-    name: 'واجب_الرياضيات.pdf',
-    size: 1024 * 1024 * 2.5, // 2.5 ميجابايت
-    type: 'application/pdf',
-    url: '/placeholder.svg',
-  },
-  {
-    id: 'file2',
-    name: 'صورة_توضيحية.jpg',
-    size: 1024 * 500, // 500 كيلوبايت
-    type: 'image/jpeg',
-    url: '/placeholder.svg',
-  },
-  {
-    id: 'file3',
-    name: 'ملاحظات.docx',
-    size: 1024 * 800, // 800 كيلوبايت
-    type: 'application/docx',
-    url: '/placeholder.svg',
+    lastActive: new Date(Date.now() - 7200000), // Last active 2 hours ago
   },
 ];
 
-// بيانات المحادثات
-export const conversations: Conversation[] = [
-  {
-    id: 'conv1',
-    participantIds: ['1', '4'], // محادثة بين المعلم أحمد والطالب خالد
-    createdAt: new Date(Date.now() - 7 * 24 * 60 * 60000), // منذ أسبوع
-    updatedAt: new Date(Date.now() - 1 * 60 * 60000), // منذ ساعة
-    unreadCount: 2,
-  },
-  {
-    id: 'conv2',
-    participantIds: ['1', '5'], // محادثة بين المعلم أحمد والطالبة نورة
-    createdAt: new Date(Date.now() - 14 * 24 * 60 * 60000), // منذ أسبوعين
-    updatedAt: new Date(Date.now() - 2 * 24 * 60 * 60000), // منذ يومين
-    unreadCount: 0,
-  },
-  {
-    id: 'conv3',
-    participantIds: ['2', '6'], // محادثة بين المعلمة سارة والطالب فهد
-    createdAt: new Date(Date.now() - 5 * 24 * 60 * 60000), // منذ 5 أيام
-    updatedAt: new Date(Date.now() - 6 * 60 * 60000), // منذ 6 ساعات
-    unreadCount: 1,
-  },
-  {
-    id: 'conv4',
-    participantIds: ['3', '4'], // محادثة بين المشرف محمد والطالب خالد
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60000), // منذ 3 أيام
-    updatedAt: new Date(Date.now() - 30 * 60000), // منذ 30 دقيقة
-    unreadCount: 3,
-  },
-];
-
-// بيانات الرسائل
 export const messages: Message[] = [
-  // محادثة 1: المعلم أحمد والطالب خالد
   {
     id: 'msg1',
-    text: 'مرحبا يا أستاذ، هل يمكنني الحصول على مساعدة في الواجب؟',
-    senderId: '4', // الطالب خالد
-    receiverId: '1', // المعلم أحمد
-    createdAt: new Date(Date.now() - 2 * 60 * 60000), // منذ ساعتين
+    senderId: 'user1',
+    receiverId: 'user2',
+    text: 'السلام عليكم أستاذة ليلى، كيف حالك؟',
+    createdAt: new Date('2025-05-06T09:00:00'),
     status: MessageStatus.SEEN,
     isRead: true,
   },
   {
     id: 'msg2',
-    text: 'بالطبع، ما هو السؤال الذي تحتاج المساعدة فيه؟',
-    senderId: '1', // المعلم أحمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 1.5 * 60 * 60000), // منذ ساعة ونصف
+    senderId: 'user2',
+    receiverId: 'user1',
+    text: 'وعليكم السلام يا أحمد، أنا بخير. كيف حال دراستك؟',
+    createdAt: new Date('2025-05-06T09:05:00'),
     status: MessageStatus.SEEN,
     isRead: true,
   },
   {
     id: 'msg3',
-    text: 'سؤال رقم 5 في صفحة 42',
-    senderId: '4', // الطالب خالد
-    receiverId: '1', // المعلم أحمد
-    createdAt: new Date(Date.now() - 1.3 * 60 * 60000), // منذ ساعة و20 دقيقة
-    status: MessageStatus.SEEN,
+    senderId: 'user1',
+    receiverId: 'user2',
+    text: 'الحمد لله، الأمور تسير بشكل جيد.',
+    createdAt: new Date('2025-05-06T09:10:00'),
+    status: MessageStatus.DELIVERED,
     isRead: true,
   },
   {
     id: 'msg4',
-    text: 'أرفقت لك شرحًا تفصيليًا لهذا السؤال. يمكنك مراجعته والسؤال إذا كان لديك أي استفسار.',
-    senderId: '1', // المعلم أحمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 1 * 60 * 60000), // منذ ساعة
-    status: MessageStatus.DELIVERED,
-    isRead: false,
-    files: [files[0]], // ملف واجب الرياضيات
+    senderId: 'user3',
+    receiverId: 'user1',
+    text: 'مرحبا أحمد، هل لديك أي أسئلة بخصوص المشروع؟',
+    createdAt: new Date('2025-05-06T10:00:00'),
+    status: MessageStatus.SEEN,
+    isRead: true,
   },
   {
     id: 'msg5',
-    text: 'شكراً جزيلاً يا أستاذ!',
-    senderId: '4', // الطالب خالد
-    receiverId: '1', // المعلم أحمد
-    createdAt: new Date(Date.now() - 30 * 60000), // منذ 30 دقيقة
+    senderId: 'user1',
+    receiverId: 'user3',
+    text: 'مرحبا أستاذ سالم، نعم لدي بعض الاستفسارات.',
+    createdAt: new Date('2025-05-06T10:05:00'),
     status: MessageStatus.DELIVERED,
-    isRead: false,
+    isRead: true,
   },
-  
-  // محادثة 2: المعلم أحمد والطالبة نورة
   {
     id: 'msg6',
-    text: 'أستاذ، هل يمكنني تسليم المشروع يوم الثلاثاء بدلاً من الإثنين؟',
-    senderId: '5', // الطالبة نورة
-    receiverId: '1', // المعلم أحمد
-    createdAt: new Date(Date.now() - 3 * 24 * 60 * 60000), // منذ 3 أيام
-    status: MessageStatus.SEEN,
-    isRead: true,
+    senderId: 'user2',
+    receiverId: 'user3',
+    text: 'أستاذ سالم، هل يمكننا التحدث عن أداء الطلاب؟',
+    createdAt: new Date('2025-05-06T11:00:00'),
+    status: MessageStatus.SENT,
+    isRead: false,
   },
   {
     id: 'msg7',
-    text: 'نعم يمكنك ذلك، لكن لا تتأخري أكثر من ذلك.',
-    senderId: '1', // المعلم أحمد
-    receiverId: '5', // الطالبة نورة
-    createdAt: new Date(Date.now() - 2.8 * 24 * 60 * 60000), // منذ يومين وبضع ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
+    senderId: 'user3',
+    receiverId: 'user2',
+    text: 'بالتأكيد أستاذة ليلى، تفضلي.',
+    createdAt: new Date('2025-05-06T11:05:00'),
+    status: MessageStatus.DELIVERED,
+    isRead: false,
   },
   {
     id: 'msg8',
-    text: 'شكراً جزيلاً، سأسلمه في الموعد المحدد.',
-    senderId: '5', // الطالبة نورة
-    receiverId: '1', // المعلم أحمد
-    createdAt: new Date(Date.now() - 2 * 24 * 60 * 60000), // منذ يومين
-    status: MessageStatus.SEEN,
-    isRead: true,
+    senderId: 'user4',
+    receiverId: 'user1',
+    text: 'مرحبا أحمد، هل يمكن أن تساعدني في حل هذه المسألة؟',
+    createdAt: new Date('2025-05-06T12:00:00'),
+    status: MessageStatus.SENT,
+    isRead: false,
   },
-  
-  // محادثة 3: المعلمة سارة والطالب فهد
   {
     id: 'msg9',
-    text: 'مرحبا أستاذة سارة، أرسلت لك ملخص الدرس.',
-    senderId: '6', // الطالب فهد
-    receiverId: '2', // المعلمة سارة
-    createdAt: new Date(Date.now() - 10 * 60 * 60000), // منذ 10 ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
-    files: [files[2]], // ملف ملاحظات
-  },
-  {
-    id: 'msg10',
-    text: 'شكراً فهد، سأراجعه وأعطيك ملاحظاتي.',
-    senderId: '2', // المعلمة سارة
-    receiverId: '6', // الطالب فهد
-    createdAt: new Date(Date.now() - 8 * 60 * 60000), // منذ 8 ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
-  },
-  {
-    id: 'msg11',
-    text: 'ملاحظاتي على الملخص: يحتاج إلى توضيح أكثر في الجزء الثاني، وإضافة بعض الأمثلة في الجزء الثالث.',
-    senderId: '2', // المعلمة سارة
-    receiverId: '6', // الطالب فهد
-    createdAt: new Date(Date.now() - 6 * 60 * 60000), // منذ 6 ساعات
+    senderId: 'user1',
+    receiverId: 'user4',
+    text: 'مرحبا نورة، بالطبع يمكنني المساعدة.',
+    createdAt: new Date('2025-05-06T12:05:00'),
     status: MessageStatus.DELIVERED,
-    isRead: false,
-  },
-  
-  // محادثة 4: المشرف محمد والطالب خالد
-  {
-    id: 'msg12',
-    text: 'مرحبًا خالد، أريد التحدث معك بخصوص مشاركتك في المسابقة القادمة.',
-    senderId: '3', // المشرف محمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 5 * 60 * 60000), // منذ 5 ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
-  },
-  {
-    id: 'msg13',
-    text: 'حسناً أستاذ، متى يمكننا الاجتماع لمناقشة التفاصيل؟',
-    senderId: '4', // الطالب خالد
-    receiverId: '3', // المشرف محمد
-    createdAt: new Date(Date.now() - 4.5 * 60 * 60000), // منذ 4.5 ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
-  },
-  {
-    id: 'msg14',
-    text: 'غداً بعد الحصة الثالثة في غرفة المشرفين.',
-    senderId: '3', // المشرف محمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 4 * 60 * 60000), // منذ 4 ساعات
-    status: MessageStatus.SEEN,
-    isRead: true,
-  },
-  {
-    id: 'msg15',
-    text: 'هذه صورة توضيحية للمشروع الذي سنقدمه في المسابقة.',
-    senderId: '3', // المشرف محمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 1 * 60 * 60000), // منذ ساعة
-    status: MessageStatus.DELIVERED,
-    isRead: false,
-    files: [files[1]], // صورة توضيحية
-  },
-  {
-    id: 'msg16',
-    text: 'وهذه بعض المستندات التي ستحتاجها للمراجعة.',
-    senderId: '3', // المشرف محمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 45 * 60000), // منذ 45 دقيقة
-    status: MessageStatus.DELIVERED,
-    isRead: false,
-    files: [files[0], files[2]], // عدة ملفات
-  },
-  {
-    id: 'msg17',
-    text: 'الرجاء مراجعتها قبل الاجتماع.',
-    senderId: '3', // المشرف محمد
-    receiverId: '4', // الطالب خالد
-    createdAt: new Date(Date.now() - 30 * 60000), // منذ 30 دقيقة
-    status: MessageStatus.SENT,
     isRead: false,
   },
 ];
 
-// وظائف مساعدة للوصول إلى البيانات
-export const getCurrentUser = (): User => users[0]; // افتراضياً، المستخدم الحالي هو المعلم أحمد
+export const conversations: Conversation[] = [
+  {
+    id: 'conv1',
+    participantIds: ['user1', 'user2'],
+    createdAt: new Date('2025-05-06T08:30:00'),
+    updatedAt: new Date('2025-05-07T14:45:00'),
+    unreadCount: 2,
+    status: ConversationStatus.ACTIVE,
+  },
+  {
+    id: 'conv2',
+    participantIds: ['user1', 'user3'],
+    createdAt: new Date('2025-05-05T10:15:00'),
+    updatedAt: new Date('2025-05-07T09:20:00'),
+    unreadCount: 0,
+    status: ConversationStatus.ACTIVE,
+  },
+  {
+    id: 'conv3',
+    participantIds: ['user2', 'user3'],
+    createdAt: new Date('2025-05-04T12:00:00'),
+    updatedAt: new Date('2025-05-06T18:30:00'),
+    unreadCount: 5,
+    status: ConversationStatus.ACTIVE,
+  },
+  {
+    id: 'conv4',
+    participantIds: ['user4', 'user1'],
+    createdAt: new Date('2025-05-03T15:45:00'),
+    updatedAt: new Date('2025-05-05T11:10:00'),
+    unreadCount: 1,
+    status: ConversationStatus.ACTIVE,
+  },
+];
+
+export const getCurrentUser = (): User => {
+  // This is a mock implementation. In a real application,
+  // you would fetch the current user from your authentication system.
+  return users[0];
+};
 
 export const getUserById = (id: string): User | undefined => {
-  return users.find(user => user.id === id);
+  return users.find((user) => user.id === id);
 };
 
-export const getConversationById = (id: string): Conversation | undefined => {
-  return conversations.find(conv => conv.id === id);
-};
-
-export const getMessagesByConversationId = (conversationId: string): Message[] => {
-  const conversation = getConversationById(conversationId);
-  if (!conversation) return [];
-  
-  const participantIds = conversation.participantIds;
-  return messages.filter(
-    msg => 
-      (participantIds.includes(msg.senderId) && participantIds.includes(msg.receiverId))
-  ).sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
+export const getUserInitials = (name: string): string => {
+  const nameParts = name.split(' ');
+  const initials = nameParts.map((part) => part.charAt(0).toUpperCase()).join('');
+  return initials;
 };
 
 export const getUserConversations = (userId: string): Conversation[] => {
-  return conversations
-    .filter(conv => conv.participantIds.includes(userId))
-    .sort((a, b) => b.updatedAt.getTime() - a.updatedAt.getTime());
-};
-
-export const getConversationByParticipants = (userId1: string, userId2: string): Conversation | undefined => {
-  return conversations.find(conv => 
-    conv.participantIds.includes(userId1) && conv.participantIds.includes(userId2)
+  return conversations.filter((conversation) =>
+    conversation.participantIds.includes(userId)
   );
 };
 
-export const getConversationForUsers = (userOne: User, userTwo: User): Conversation | undefined => {
-  return getConversationByParticipants(userOne.id, userTwo.id);
-};
+export const getMessagesByConversationId = (conversationId: string): Message[] => {
+  const conversation = conversations.find((c) => c.id === conversationId);
+  if (!conversation) return [];
 
-export function formatFileSize(bytes: number): string {
-  if (bytes < 1024) {
-    return bytes + ' B';
-  } else if (bytes < 1024 * 1024) {
-    return (bytes / 1024).toFixed(1) + ' KB';
-  } else if (bytes < 1024 * 1024 * 1024) {
-    return (bytes / (1024 * 1024)).toFixed(1) + ' MB';
-  } else {
-    return (bytes / (1024 * 1024 * 1024)).toFixed(1) + ' GB';
-  }
-}
-
-export function getLastMessage(conversationId: string): Message | undefined {
-  const convMessages = getMessagesByConversationId(conversationId);
-  if (convMessages.length === 0) return undefined;
-  
-  // ترتيب الرسائل حسب التاريخ (الأحدث أولاً) والحصول على آخر رسالة
-  return [...convMessages].sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
-}
-
-export function getUnreadCount(conversationId: string, userId: string): number {
-  const convMessages = getMessagesByConversationId(conversationId);
-  return convMessages.filter(msg => msg.receiverId === userId && !msg.isRead).length;
-}
-
-export const getStudents = (): User[] => {
-  return users.filter(user => user.role === UserRole.STUDENT);
+  return messages.filter((message) =>
+    conversation.participantIds.includes(message.senderId) &&
+    conversation.participantIds.includes(message.receiverId) &&
+    (conversations.find(c => c.id === conversationId)?.participantIds.includes(message.senderId) || false) &&
+    (conversations.find(c => c.id === conversationId)?.participantIds.includes(message.receiverId) || false)
+  ).sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime());
 };
 
 export const getTeachersAndSupervisors = (): User[] => {
-  return users.filter(user => user.role === UserRole.TEACHER || user.role === UserRole.SUPERVISOR);
+  return users.filter(
+    (user) =>
+      user.role === UserRole.TEACHER || user.role === UserRole.SUPERVISOR
+  );
+};
+
+export const getStudents = (): User[] => {
+  return users.filter((user) => user.role === UserRole.STUDENT);
+};
+
+export const getLastMessage = (conversationId: string): Message | undefined => {
+  const conversationMessages = messages.filter((message) => {
+    const conversation = conversations.find((c) => c.id === conversationId);
+    if (!conversation) return false;
+    return conversation.participantIds.includes(message.senderId) &&
+           conversation.participantIds.includes(message.receiverId);
+  });
+  
+  if (conversationMessages.length === 0) {
+    return undefined;
+  }
+
+  return conversationMessages.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())[0];
+};
+
+export const getUnreadCount = (conversationId: string, userId: string): number => {
+  return messages.filter(
+    (message) =>
+      message.receiverId === userId &&
+      !message.isRead &&
+      conversations.find(c => c.id === conversationId)?.participantIds.includes(message.senderId) &&
+      conversations.find(c => c.id === conversationId)?.participantIds.includes(message.receiverId)
+  ).length;
 };
 
 export const isTeacherOrSupervisor = (user: User): boolean => {
@@ -374,26 +248,4 @@ export const formatTime = (date: Date): string => {
   const hours = date.getHours().toString().padStart(2, '0');
   const minutes = date.getMinutes().toString().padStart(2, '0');
   return `${hours}:${minutes}`;
-};
-
-export const formatDate = (date: Date): string => {
-  const today = new Date();
-  const yesterday = new Date();
-  yesterday.setDate(yesterday.getDate() - 1);
-  
-  if (date.toDateString() === today.toDateString()) {
-    return 'اليوم';
-  } else if (date.toDateString() === yesterday.toDateString()) {
-    return 'الأمس';
-  } else {
-    return date.toLocaleDateString('ar-SA', { weekday: 'long', year: 'numeric', month: 'short', day: 'numeric' });
-  }
-};
-
-export const getUserInitials = (name: string): string => {
-  const parts = name.split(' ');
-  if (parts.length >= 2) {
-    return (parts[0][0] + parts[1][0]).toUpperCase();
-  }
-  return name.slice(0, 2).toUpperCase();
 };

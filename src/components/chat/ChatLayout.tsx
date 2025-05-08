@@ -1,8 +1,9 @@
+
 import { useState, useEffect, useRef } from "react";
 import { UserItem } from "./UserItem";
 import { MessageInput } from "./MessageInput";
 import { MessageGroup } from "./MessageItem";
-import { Search, Bell, UserIcon } from "lucide-react";
+import { Search, Bell, UserIcon, Lock, LockOpen } from "lucide-react";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ScrollArea } from "@/components/ui/scroll-area";
 import { Button } from "@/components/ui/button";
@@ -21,6 +22,7 @@ import {
   MessageStatus,
   User,
   UserRole,
+  ConversationStatus,
 } from "@/lib/types";
 import {
   getCurrentUser,
@@ -39,6 +41,7 @@ import {
 export function ChatLayout() {
   const currentUser = getCurrentUser();
   const isCurrentUserStaff = isTeacherOrSupervisor(currentUser);
+  const isSupervisor = currentUser.role === UserRole.SUPERVISOR;
   
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedUserId, setSelectedUserId] = useState<string | null>(null);
@@ -47,6 +50,7 @@ export function ChatLayout() {
   const [messages, setMessages] = useState<Message[]>([]);
   const [newMessage, setNewMessage] = useState("");
   const [isUserProfileOpen, setIsUserProfileOpen] = useState(false);
+  const [selectedConversation, setSelectedConversation] = useState<Conversation | null>(null);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   
@@ -61,6 +65,7 @@ export function ChatLayout() {
       const otherParticipant = firstConversation.participantIds.find(id => id !== currentUser.id);
       if (otherParticipant) {
         setSelectedUserId(otherParticipant);
+        setSelectedConversation(firstConversation);
       }
     }
   }, [currentUser.id]);
@@ -76,11 +81,14 @@ export function ChatLayout() {
       if (conversation) {
         const conversationMessages = getMessagesByConversationId(conversation.id);
         setMessages(conversationMessages);
+        setSelectedConversation(conversation);
       } else {
         setMessages([]);
+        setSelectedConversation(null);
       }
     } else {
       setMessages([]);
+      setSelectedConversation(null);
     }
   }, [selectedUserId, conversations, currentUser.id]);
   
@@ -91,6 +99,12 @@ export function ChatLayout() {
   
   const handleSendMessage = (text: string, files?: File[]) => {
     if (!selectedUserId || (!text.trim() && (!files || files.length === 0))) return;
+    
+    // التحقق إذا كانت المحادثة مغلقة
+    if (selectedConversation?.status === ConversationStatus.CLOSED) {
+      toast.error("لا يمكن إرسال رسائل في محادثة مغلقة");
+      return;
+    }
     
     // عرض الملفات المرفقة في رسالة توست
     if (files && files.length > 0) {
@@ -155,6 +169,35 @@ export function ChatLayout() {
         description: `${receiver.name}: ${autoReply.text}`,
       });
     }, randomDelay);
+  };
+  
+  // دالة لتغيير حالة المحادثة (فتح/إغلاق)
+  const toggleConversationStatus = () => {
+    if (!selectedConversation) return;
+    
+    const newStatus = selectedConversation.status === ConversationStatus.ACTIVE
+      ? ConversationStatus.CLOSED
+      : ConversationStatus.ACTIVE;
+    
+    // تحديث حالة المحادثة
+    const updatedConversations = conversations.map(conv => 
+      conv.id === selectedConversation.id
+        ? { ...conv, status: newStatus }
+        : conv
+    );
+    
+    setConversations(updatedConversations);
+    
+    // تحديث المحادثة المحددة
+    const updatedConversation = { ...selectedConversation, status: newStatus };
+    setSelectedConversation(updatedConversation);
+    
+    // عرض إشعار
+    if (newStatus === ConversationStatus.CLOSED) {
+      toast.success("تم إغلاق المحادثة");
+    } else {
+      toast.success("تم إعادة فتح المحادثة");
+    }
   };
   
   // الحصول على قائمة المستخدمين المتاحين للمحادثة
@@ -239,15 +282,24 @@ export function ChatLayout() {
                   const unreadCount = getUnreadCount(conv.id, currentUser.id);
                   
                   return (
-                    <UserItem
-                      key={conv.id}
-                      user={otherParticipant}
-                      active={selectedUserId === otherParticipantId}
-                      lastMessage={lastMsg?.text || (lastMsg?.files && lastMsg.files.length > 0 ? "مرفقات" : undefined)}
-                      lastMessageTime={lastMsg?.createdAt}
-                      unreadCount={unreadCount}
-                      onClick={() => setSelectedUserId(otherParticipantId)}
-                    />
+                    <div key={conv.id} className="relative">
+                      <UserItem
+                        user={otherParticipant}
+                        active={selectedUserId === otherParticipantId}
+                        lastMessage={lastMsg?.text || (lastMsg?.files && lastMsg.files.length > 0 ? "مرفقات" : undefined)}
+                        lastMessageTime={lastMsg?.createdAt}
+                        unreadCount={unreadCount}
+                        onClick={() => setSelectedUserId(otherParticipantId)}
+                      />
+                      {/* إضافة مؤشر للمحادثات المغلقة */}
+                      {conv.status === ConversationStatus.CLOSED && (
+                        <div className="absolute left-2 top-2">
+                          <Badge variant="outline" className="text-xs py-0 px-1.5 bg-gray-100 dark:bg-gray-700">
+                            <Lock className="h-3 w-3 mr-1" /> مغلقة
+                          </Badge>
+                        </div>
+                      )}
+                    </div>
                   );
                 })}
               </div>
@@ -288,9 +340,36 @@ export function ChatLayout() {
                     {selectedUser.online ? "متصل الآن" : "غير متصل"}
                   </p>
                 </div>
+                {/* مؤشر حالة المحادثة */}
+                {selectedConversation?.status === ConversationStatus.CLOSED && (
+                  <Badge variant="outline" className="mr-2 bg-gray-100 dark:bg-gray-700">
+                    <Lock className="h-3 w-3 ml-1" /> محادثة مغلقة
+                  </Badge>
+                )}
               </div>
               
               <div className="flex items-center gap-2">
+                {/* زر فتح/إغلاق المحادثة (متاح فقط للمشرفين) */}
+                {isSupervisor && (
+                  <Button 
+                    variant={selectedConversation?.status === ConversationStatus.CLOSED ? "outline" : "destructive"} 
+                    size="sm"
+                    onClick={toggleConversationStatus}
+                    className="ml-2"
+                  >
+                    {selectedConversation?.status === ConversationStatus.CLOSED ? (
+                      <>
+                        <LockOpen className="h-4 w-4 ml-1" /> 
+                        إعادة فتح المحادثة
+                      </>
+                    ) : (
+                      <>
+                        <Lock className="h-4 w-4 ml-1" /> 
+                        إغلاق المحادثة
+                      </>
+                    )}
+                  </Button>
+                )}
                 <Button 
                   variant="ghost" 
                   size="sm"
@@ -331,7 +410,15 @@ export function ChatLayout() {
                 <MessageInput
                   onSendMessage={handleSendMessage}
                   placeholder="اكتب رسالة..."
+                  disabled={selectedConversation?.status === ConversationStatus.CLOSED}
                 />
+                {/* إظهار رسالة عندما تكون المحادثة مغلقة */}
+                {selectedConversation?.status === ConversationStatus.CLOSED && (
+                  <div className="text-center py-2 text-muted-foreground dark:text-gray-400 text-sm">
+                    <Lock className="h-4 w-4 inline-block ml-1" />
+                    هذه المحادثة مغلقة ولا يمكن إرسال رسائل جديدة
+                  </div>
+                )}
               </div>
             </div>
             

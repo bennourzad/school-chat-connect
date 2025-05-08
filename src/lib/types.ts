@@ -11,6 +11,11 @@ export enum MessageStatus {
   SEEN = 'seen'
 }
 
+export enum ConversationStatus {
+  ACTIVE = 'active',
+  CLOSED = 'closed'
+}
+
 export interface User {
   id: string;
   name: string;
@@ -50,4 +55,5 @@ export interface Conversation {
   createdAt: Date;
   updatedAt: Date;
   unreadCount: number;
+  status: ConversationStatus;
 }
