@@ -3,15 +3,12 @@ import React, { useState, useRef } from "react";
 import { Send, Paperclip } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { toast } from "sonner";
-
-interface MessageInputProps {
-  onSendMessage: (text: string, files?: File[]) => void;
-  placeholder?: string;
-}
+import { MessageInputProps } from "@/lib/types";
 
 export function MessageInput({ 
   onSendMessage, 
-  placeholder = "اكتب رسالتك هنا..." 
+  placeholder = "اكتب رسالتك هنا...",
+  disabled = false
 }: MessageInputProps) {
   const [message, setMessage] = useState("");
   const [files, setFiles] = useState<File[]>([]);
@@ -84,7 +81,7 @@ export function MessageInput({
           type="submit"
           size="icon"
           className="bg-chat-primary text-white rounded-full hover:bg-chat-primary/90"
-          disabled={!message.trim() && files.length === 0}
+          disabled={disabled || (!message.trim() && files.length === 0)}
         >
           <Send className="h-5 w-5" />
         </Button>
@@ -96,6 +93,7 @@ export function MessageInput({
           placeholder={placeholder}
           className="flex-1 resize-none bg-muted/50 border rounded-xl px-4 py-2 focus:outline-none focus:ring-1 focus:ring-primary"
           rows={1}
+          disabled={disabled}
           style={{
             minHeight: "40px",
             maxHeight: "120px",
@@ -109,6 +107,7 @@ export function MessageInput({
           onChange={handleFileChange}
           className="hidden"
           multiple
+          disabled={disabled}
         />
         <Button
           type="button"
@@ -116,6 +115,7 @@ export function MessageInput({
           size="icon"
           className="text-muted-foreground"
           onClick={() => fileInputRef.current?.click()}
+          disabled={disabled}
         >
           <Paperclip className="h-5 w-5" />
         </Button>

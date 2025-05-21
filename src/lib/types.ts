@@ -60,6 +60,6 @@ export interface Conversation {
 
 export interface MessageInputProps {
   onSendMessage: (text: string, files?: File[]) => void;
-  placeholder: string;
+  placeholder?: string;
   disabled?: boolean;
 }
